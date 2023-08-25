@@ -5,9 +5,11 @@ import { css } from "@emotion/css";
 import { FlexContainer } from "@/styles/reusable/styles";
 import { AddOutlined, DeleteOutline } from "@mui/icons-material";
 import DefaultLayout from "@/layouts/DefaultLayout";
-import { useMutation } from "@apollo/client";
-import AddContactWithPhones from "@/services/addContactWithPhones";
+import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import editContact from "@/services/editContact";
+import getContactDetail from "@/services/getContactDetail";
+import useEdit from "@/hooks/useEdit";
 
 const AddContactForm = styled.form`
   display: flex;
@@ -35,50 +37,16 @@ const RemoveButton = styled.button`
 `;
 
 const AddContact = () => {
-  const router = useRouter();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phoneNumbers, setPhoneNumbers] = useState([""]);
-  const [addContactWithPhones] = useMutation(AddContactWithPhones);
-
-  const handlePhoneNumberChange = (index: number, value: string) => {
-    const updatedPhoneNumbers = [...phoneNumbers];
-    updatedPhoneNumbers[index] = value;
-    setPhoneNumbers(updatedPhoneNumbers);
-  };
-
-  const handleAddPhoneNumber = () => {
-    setPhoneNumbers([...phoneNumbers, ""]);
-  };
-
-  const handleRemovePhoneNumber = (index: number) => {
-    const updatedPhoneNumbers = phoneNumbers.filter((_, i) => i !== index);
-    setPhoneNumbers(updatedPhoneNumbers);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const phones = phoneNumbers.map((number) => ({ number }));
-
-    try {
-      addContactWithPhones({
-        variables: {
-          first_name: firstName,
-          last_name: lastName,
-          phones,
-        },
-        onCompleted() {
-          router.replace("/");
-        },
-      });
-
-      setFirstName("");
-      setLastName("");
-      setPhoneNumbers([""]);
-    } catch (error) {
-      console.error("Error adding contact:", error);
-    }
-  };
+  const {
+    handleSubmit,
+    data,
+    setFirstName,
+    setLastName,
+    phoneNumbers,
+    handlePhoneNumberChange,
+    handleRemovePhoneNumber,
+    handleAddPhoneNumber,
+  } = useEdit();
 
   return (
     <>
@@ -103,7 +71,7 @@ const AddContact = () => {
               First Name*
               <InputForm
                 type="text"
-                value={firstName}
+                defaultValue={data?.contact_by_pk?.first_name}
                 onChange={(e) => setFirstName(e.target.value)}
                 required
               />
@@ -119,7 +87,7 @@ const AddContact = () => {
               Last Name*
               <InputForm
                 type="text"
-                value={lastName}
+                defaultValue={data?.contact_by_pk?.last_name}
                 onChange={(e) => setLastName(e.target.value)}
                 required
               />
@@ -130,12 +98,11 @@ const AddContact = () => {
           Phone Numbers*
           <FlexContainer
             direction="column"
-            alignItems=""
             className={css`
               width: 100%;
             `}
           >
-            {phoneNumbers.map((number, index) => (
+            {phoneNumbers.map((number: string, index: number) => (
               <FlexContainer key={index}>
                 <FlexContainer
                   className={css`
@@ -144,7 +111,7 @@ const AddContact = () => {
                 >
                   <InputForm
                     type="text"
-                    value={number}
+                    defaultValue={number}
                     onChange={(e) =>
                       handlePhoneNumberChange(index, e.target.value)
                     }
@@ -206,7 +173,7 @@ const AddContact = () => {
             `}
             type="submit"
           >
-            Add To Contact
+            Edit Contact
           </button>
         </div>
       </AddContactForm>
@@ -216,7 +183,7 @@ const AddContact = () => {
 
 AddContact.getLayout = (page: any) => {
   return (
-    <DefaultLayout isBack={true} title="Add Contact">
+    <DefaultLayout isBack={true} title="Edit Contact">
       {page}
     </DefaultLayout>
   );

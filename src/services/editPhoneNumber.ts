@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-const getPhoneNumber = gql`
+const editPhoneNumber = gql`
   mutation EditPhoneNumber(
     $pk_columns: phone_pk_columns_input!
     $new_phone_number: String!
@@ -22,7 +22,7 @@ const getPhoneNumber = gql`
   }
 `;
 
-export default getPhoneNumber;
+export default editPhoneNumber;
 
 //variables:
 // {

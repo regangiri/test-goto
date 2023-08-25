@@ -27,7 +27,7 @@ const DetailProfilePicture = styled.div`
 `;
 
 const Detail = () => {
-  const { loading, error, contactDetail } = useDetail();
+  const { loading, error, contactDetail, redirectToEdit } = useDetail();
 
   console.log(contactDetail);
 
@@ -47,6 +47,7 @@ const Detail = () => {
           className={css`
             font-weight: 600;
           `}
+          onClick={() => redirectToEdit(contactDetail?.id)}
         >
           Edit
         </span>

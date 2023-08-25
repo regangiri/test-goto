@@ -12,11 +12,16 @@ const useDetail = () => {
     },
   });
 
+  const redirectToEdit = (contactId: number) => {
+    router.push(`/edit/${contactId}`);
+  };
+
   return {
     id,
     loading,
     error,
     contactDetail: data ? data.contact_by_pk : {},
+    redirectToEdit,
   };
 };
 export default useDetail;

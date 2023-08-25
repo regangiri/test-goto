@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import truncateString from "@/helper/truncateString";
 import useContacts from "@/hooks/useContacts";
+import { AddOutlined } from "@mui/icons-material";
 
 export const PhoneBookContainer = styled.div`
   min-height: 100vh;
@@ -41,15 +42,43 @@ const ContactName = styled.span`
   text-transform: capitalize;
 `;
 
-const Home = () => {
-  const { error, loading, contacts, redirectToDetail } = useContacts();
+const AddButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 50px;
+  height: 50px;
+`;
 
-  console.log(contacts);
+const AddButton = styled.button`
+  border: none;
+  padding: 12px 16px;
+  border-radius: 50%;
+  background-color: #f4f4f4;
+  &:hover {
+    color: white;
+    background-color: black;
+  }
+`;
+
+const Home = () => {
+  const {
+    error,
+    loading,
+    contacts,
+    redirectToDetail,
+    redirectToAdd,
+    handleSearch,
+  } = useContacts();
 
   return (
     <>
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
+      <input type="text" placeholder="Search" onChange={handleSearch} />
       {!loading &&
         !error &&
         contacts?.length > 0 &&
@@ -73,6 +102,11 @@ const Home = () => {
             </ContactCard>
           );
         })}
+      <AddButtonContainer onClick={() => redirectToAdd()}>
+        <AddButton>
+          <AddOutlined fontSize="medium" />
+        </AddButton>
+      </AddButtonContainer>
     </>
   );
 };
