@@ -27,7 +27,8 @@ const DetailProfilePicture = styled.div`
 `;
 
 const Detail = () => {
-  const { loading, error, contactDetail, redirectToEdit } = useDetail();
+  const { id, loading, error, contactDetail, redirectToEdit, handleDelete } =
+    useDetail();
 
   console.log(contactDetail);
 
@@ -90,6 +91,7 @@ const Detail = () => {
               );
             })}
           </FlexContainer>
+          <button onClick={handleDelete}>Delete contact</button>
         </>
       ) : null}
     </PhoneBookContainer>

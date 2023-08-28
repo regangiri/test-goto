@@ -5,6 +5,7 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import truncateString from "@/helper/truncateString";
 import useContacts from "@/hooks/useContacts";
 import { AddOutlined } from "@mui/icons-material";
+import { InputForm } from "./add";
 
 export const PhoneBookContainer = styled.div`
   min-height: 100vh;
@@ -45,12 +46,13 @@ const ContactName = styled.span`
 const AddButtonContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  position: absolute;
+  justify-content: flex-end;
+  position: fixed;
   bottom: 16px;
   right: 16px;
-  width: 50px;
+  width: 100%;
   height: 50px;
+  background-color: transparent;
 `;
 
 const AddButton = styled.button`
@@ -78,7 +80,7 @@ const Home = () => {
     <>
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
-      <input type="text" placeholder="Search" onChange={handleSearch} />
+      <InputForm type="text" placeholder="Search" onChange={handleSearch} />
       {!loading &&
         !error &&
         contacts?.length > 0 &&

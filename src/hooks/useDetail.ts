@@ -1,5 +1,6 @@
+import deleteContact from "@/services/deleteContact";
 import getContactDetail from "@/services/getContactDetail";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
 const useDetail = () => {
@@ -12,8 +13,20 @@ const useDetail = () => {
     },
   });
 
+  const [deleteContacts] = useMutation(deleteContact);
+
   const redirectToEdit = (contactId: number) => {
     router.push(`/edit/${contactId}`);
+  };
+
+  const handleDelete = (e: React.MouseEvent) => {
+    deleteContacts({
+      variables: { id: id },
+      onCompleted() {
+        router.replace("/");
+      },
+    });
+    e.preventDefault();
   };
 
   return {
@@ -22,6 +35,7 @@ const useDetail = () => {
     error,
     contactDetail: data ? data.contact_by_pk : {},
     redirectToEdit,
+    handleDelete,
   };
 };
 export default useDetail;

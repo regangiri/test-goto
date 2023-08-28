@@ -14,7 +14,7 @@ const AddContactForm = styled.form`
   flex-direction: column;
 `;
 
-const InputForm = styled.input`
+export const InputForm = styled.input`
   margin: 5px 0;
   width: 100%;
   padding: 2px 6px;
